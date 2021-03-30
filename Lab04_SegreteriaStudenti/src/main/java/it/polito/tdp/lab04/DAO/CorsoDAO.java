@@ -33,22 +33,17 @@ public class CorsoDAO {
 				int numeroCrediti = rs.getInt("crediti");
 				String nome = rs.getString("nome");
 				int periodoDidattico = rs.getInt("pd");
-
-				System.out.println(codins + " " + numeroCrediti + " " + nome + " " + periodoDidattico);
-
-				// Crea un nuovo JAVA Bean Corso
-				// Aggiungi il nuovo oggetto Corso alla lista corsi
+				Corso c= new Corso(codins,numeroCrediti,nome,periodoDidattico);
+				corsi.add(c);
+				System.out.println(c.toString());
 			}
 
 			conn.close();
-			
-			return corsi;
-			
-
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new RuntimeException("Errore Db", e);
 		}
+		return corsi;
 	}
 	
 	
