@@ -41,7 +41,7 @@ public class CorsoDAO {
 			conn.close();
 		} catch (SQLException e) {
 			// e.printStackTrace();
-			throw new RuntimeException("Errore Db", e);
+			throw new RuntimeException("Errore DB", e);
 		}
 		return corsi;
 	}
@@ -50,8 +50,28 @@ public class CorsoDAO {
 	/*
 	 * Dato un codice insegnamento, ottengo il corso
 	 */
-	public void getCorso(Corso corso) {
-		// TODO
+	public Corso getCorso(String codins) {
+		String sql= "SELECT crediti, nome, pd "
+				+ "FROM corso "
+				+ "WHERE codins=?";
+		Corso c = null;
+		try {
+			Connection conn= ConnectDB.getConnection();
+			PreparedStatement st= conn.prepareStatement(sql);
+			st.setString(1, codins);
+			ResultSet rs= st.executeQuery();
+			
+			while(rs.next()) {
+				Integer crediti=rs.getInt("crediti");
+				String nome= rs.getString("nome");
+				Integer pd= rs.getInt("pd");
+				c= new Corso(codins,crediti,nome,pd);
+			}
+			conn.close();
+		} catch(SQLException e) {
+			throw new RuntimeException("Errore DB", e);
+		}
+		return c;
 	}
 
 	/*
@@ -88,8 +108,26 @@ public class CorsoDAO {
 	/*
 	 * Data una matricola ed il codice insegnamento, iscrivi lo studente al corso.
 	 */
-	public boolean inscriviStudenteACorso(Studente studente, Corso corso) {
-		// TODO
+	public boolean inscriviStudenteACorso(int matricola, String codins) {
+		Corso c= this.getCorso(codins);
+		String sql = "SELECT s.matricola, s.nome, cognome, cds "
+				+ "FROM corso c, iscrizione i, studente s "
+				+ "WHERE c.codins=i.codins AND s.matricola=i.matricola AND c.codins=? AND s.matricola=? "
+				+ "GROUP BY s.matricola, s.nome, cognome, cds";
+		Studente s= null;
+		try {
+			Connection conn= ConnectDB.getConnection();
+			PreparedStatement st= conn.prepareStatement(sql);
+			st.setString(1, codins);
+			st.setInt(2, matricola);
+			ResultSet rs= st.executeQuery();
+			if (rs.next()==false) {
+				
+			}
+			conn.close();
+		}catch (SQLException e) {
+			throw new RuntimeException("Errore DB",e);
+		}
 		// ritorna true se l'iscrizione e' avvenuta con successo
 		return false;
 	}

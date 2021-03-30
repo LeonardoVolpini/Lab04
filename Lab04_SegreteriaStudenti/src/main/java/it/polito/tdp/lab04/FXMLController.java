@@ -78,7 +78,14 @@ public class FXMLController {
 
     @FXML
     void handleIscrivi(ActionEvent event) {
-    	
+    	String matric= this.txtMatricola.getText();
+    	int matricola;
+    	try {
+    		matricola= Integer.parseInt(matric);
+    	} catch(NumberFormatException fne) {
+    		this.txtResult.setText("inserire un numero di matricola");
+    		return;
+    	}
     }
     
     @FXML
@@ -102,7 +109,10 @@ public class FXMLController {
 
     @FXML
     void handleReset(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	this.txtCognome.clear();
+    	this.txtNome.clear();
+    	this.txtMatricola.clear();
     }
 
     @FXML
