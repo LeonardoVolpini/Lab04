@@ -1,6 +1,6 @@
 package it.polito.tdp.lab04.model;
 
-public class Corso {
+public class Corso implements Comparable<Corso>{
 
 	private String codins;
 	private Integer crediti;
@@ -76,6 +76,11 @@ public class Corso {
 		if (codins.isEmpty() && crediti==-1 && nome.isEmpty() && pd==-1)
 			return "                                  ";
 		return codins + "  " + crediti + "  " + nome + "  " + pd;
+	}
+
+	@Override
+	public int compareTo(Corso o) {
+		return this.nome.compareTo(o.getNome());
 	}
 	
 }

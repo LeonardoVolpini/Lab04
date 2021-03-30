@@ -22,4 +22,15 @@ public class Model {
 	public Studente getStudente(int matricola) {
 		return this.studenteDAO.getStudente(matricola);
 	}
+	
+	public List<Studente> getStudentiPerCorso (Corso corso) {
+		return this.corsoDAO.getStudentiIscrittiAlCorso(corso);
+	}
+	
+	public List<Corso> getCorsiPerStudente (int matricola) {
+		Studente s= this.getStudente(matricola);
+		if (s!=null)
+			return this.studenteDAO.getCorsiPerStudente(s);
+		return null;
+	}
 }

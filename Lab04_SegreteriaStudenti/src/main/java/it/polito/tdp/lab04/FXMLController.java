@@ -1,6 +1,7 @@
 package it.polito.tdp.lab04;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -44,17 +45,40 @@ public class FXMLController {
 
     @FXML
     void handleCercaCorsi(ActionEvent event) {
-
+    	String matric= this.txtMatricola.getText();
+    	int matricola;
+    	try {
+    		matricola= Integer.parseInt(matric);
+    	} catch(NumberFormatException fne) {
+    		this.txtResult.setText("inserire un numero di matricola");
+    		return;
+    	}
+    	List<Corso> result = this.model.getCorsiPerStudente(matricola);
+    	if (result!=null) {
+	    	this.txtResult.clear();
+	    	for (Corso c : result)
+	    		this.txtResult.appendText(c.toString()+"\n");
+    	} else {
+    		this.txtResult.setText("numero di matricola non presente nel database");
+    	}
     }
 
     @FXML
     void handleCercaIscrittiCorso(ActionEvent event) {
-
+    	Corso corso=this.ChBoxCorsi.getValue();
+    	if (corso==null || corso.getNome().isEmpty()) {
+    		this.txtResult.setText("scegliere un corso di cui avere la lista degli iscritti");
+    		return;
+    	}
+    	List<Studente> result=this.model.getStudentiPerCorso(corso);
+    	this.txtResult.clear();
+    	for (Studente s : result)
+    		this.txtResult.appendText(s.toString()+"\n");
     }
 
     @FXML
     void handleIscrivi(ActionEvent event) {
-
+    	
     }
     
     @FXML
@@ -94,6 +118,7 @@ public class FXMLController {
     public void setModel(Model model) {
     	this.model=model;
     	List<Corso> corsi= this.model.getCorsi();
+    	Collections.sort(corsi);
     	corsi.add(new Corso("",-1,"",-1));
     	this.ChBoxCorsi.getItems().addAll(corsi);
     } 
