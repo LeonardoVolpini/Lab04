@@ -113,6 +113,7 @@ public class FXMLController {
     	this.txtCognome.clear();
     	this.txtNome.clear();
     	this.txtMatricola.clear();
+    	this.ChBoxCorsi.setValue(null);
     }
 
     @FXML
