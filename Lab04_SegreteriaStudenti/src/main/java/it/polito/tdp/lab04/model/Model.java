@@ -20,7 +20,7 @@ public class Model {
 	}
 	
 	public Studente getStudente(int matricola) {
-		return this.studenteDAO.getStudente(matricola);
+		return this.studenteDAO.getStudente(new Studente(matricola,null,null,null));
 	}
 	
 	public List<Studente> getStudentiPerCorso (Corso corso) {
@@ -32,5 +32,9 @@ public class Model {
 		if (s!=null)
 			return this.studenteDAO.getCorsiPerStudente(s);
 		return null;
+	}
+	
+	public int StudenteIscrittoAlCorso (int matricola, Corso corso) {
+		return this.studenteDAO.studenteIscrittoAlCorso(corso, new Studente(matricola,null,null,null));
 	}
 }

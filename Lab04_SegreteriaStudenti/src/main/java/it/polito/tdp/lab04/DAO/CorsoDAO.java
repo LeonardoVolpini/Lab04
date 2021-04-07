@@ -50,7 +50,7 @@ public class CorsoDAO {
 	/*
 	 * Dato un codice insegnamento, ottengo il corso
 	 */
-	public Corso getCorso(String codins) {
+	public Corso getCorso(Corso corso) {
 		String sql= "SELECT crediti, nome, pd "
 				+ "FROM corso "
 				+ "WHERE codins=?";
@@ -58,14 +58,14 @@ public class CorsoDAO {
 		try {
 			Connection conn= ConnectDB.getConnection();
 			PreparedStatement st= conn.prepareStatement(sql);
-			st.setString(1, codins);
+			st.setString(1, corso.getCodins());
 			ResultSet rs= st.executeQuery();
 			
 			while(rs.next()) {
 				Integer crediti=rs.getInt("crediti");
 				String nome= rs.getString("nome");
 				Integer pd= rs.getInt("pd");
-				c= new Corso(codins,crediti,nome,pd);
+				c= new Corso(corso.getCodins(),crediti,nome,pd);
 			}
 			conn.close();
 		} catch(SQLException e) {
@@ -79,9 +79,8 @@ public class CorsoDAO {
 	 */
 	public List<Studente> getStudentiIscrittiAlCorso(Corso corso) {
 		String sql = "SELECT s.matricola, s.nome, cognome, cds "
-				+"FROM corso c, iscrizione i, studente s "
-				+"WHERE c.codins=i.codins AND i.matricola=s.matricola AND i.codins=? "
-				+"GROUP BY s.matricola, s.nome, cognome, cds";
+				+"FROM iscrizione i, studente s "
+				+"WHERE i.matricola=s.matricola AND i.codins=?";
 		List<Studente> studenti = new LinkedList<>();
 		try {
 			Connection conn= ConnectDB.getConnection();
@@ -108,8 +107,7 @@ public class CorsoDAO {
 	/*
 	 * Data una matricola ed il codice insegnamento, iscrivi lo studente al corso.
 	 */
-	public boolean inscriviStudenteACorso(int matricola, String codins) {
-		Corso c= this.getCorso(codins);
+	public boolean inscriviStudenteACorso(Studente studente, Corso corso) {
 		String sql = "SELECT s.matricola, s.nome, cognome, cds "
 				+ "FROM corso c, iscrizione i, studente s "
 				+ "WHERE c.codins=i.codins AND s.matricola=i.matricola AND c.codins=? AND s.matricola=? "
@@ -118,8 +116,8 @@ public class CorsoDAO {
 		try {
 			Connection conn= ConnectDB.getConnection();
 			PreparedStatement st= conn.prepareStatement(sql);
-			st.setString(1, codins);
-			st.setInt(2, matricola);
+			st.setString(1, corso.getCodins());
+			st.setInt(2, studente.getMatricola());
 			ResultSet rs= st.executeQuery();
 			if (rs.next()==false) {
 				

@@ -86,6 +86,21 @@ public class FXMLController {
     		this.txtResult.setText("inserire un numero di matricola");
     		return;
     	}
+    	Corso corso= this.ChBoxCorsi.getValue();
+    	if (corso==null || corso.getNome().isEmpty()) {
+    		this.txtResult.setText("scegliere un corso di cui avere la lista degli iscritti");
+    		return;
+    	}
+    	int x = this.model.StudenteIscrittoAlCorso(matricola, corso);
+    	if (x==1) {
+    		this.txtResult.setText("Errore. Studente già iscritto al corso");
+    	}
+    	else if (x==0) {
+    		this.txtResult.setText("Studente iscritto al corso con successo");
+    	}
+    	else {
+    		this.txtResult.setText("Studente non presente nel database");
+    	}
     }
     
     @FXML

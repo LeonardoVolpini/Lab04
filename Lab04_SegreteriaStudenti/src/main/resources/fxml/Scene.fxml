@@ -92,7 +92,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </HBox>
-            <TextArea fx:id="txtResult">
+            <TextArea fx:id="txtResult" style="-fx-font-family: monospace;">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
